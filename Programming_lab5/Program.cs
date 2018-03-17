@@ -174,7 +174,7 @@ namespace Programming_lab5
                 {
                     return rng.Next(min, max);
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (ArgumentOutOfRangeException)
                 {
                     Console.WriteLine("Minimal value cannot be bigger than maximal value.\nPlease enter the correct values."); //Output the error message
 
@@ -220,9 +220,8 @@ namespace Programming_lab5
                 Console.WriteLine("Enter the maximal number of the range:");
                 max = InputInt32(false);
                 //Filling the array with random nubmers
-                for(int i = 0; i < n; i++)
-                    //Using foreach cycle since we don't know the row length
-                    foreach (int j in ragArr[i])
+                for(int i = 0; i < ragArr.Length; i++)
+                    for (int j = 0; j < ragArr[i].Length; j++)
                     {
                         ragArr[i][j] = GetRandomInRange(ref min, ref max);
                     }
@@ -235,8 +234,8 @@ namespace Programming_lab5
             else
             {
                 //Filling the ragged array manually
-                for(int i = 0; i < n; i++)
-                    foreach (int j in ragArr[i])
+                for (int i = 0; i < ragArr.Length; i++)
+                    for (int j = 0; j < ragArr[i].Length; j++)
                     {
                         Console.WriteLine("Please enter the element #{0} of ROW #{1}:", j + 1, i + 1);
                         ragArr[i][j] = InputInt32(false);
