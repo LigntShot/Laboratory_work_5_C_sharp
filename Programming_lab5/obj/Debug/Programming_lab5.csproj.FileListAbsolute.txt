@@ -1,0 +1,13 @@
+D:\Work\Programming_lab5\Programming_lab5\bin\Debug\Programming_lab5.exe.config
+D:\Work\Programming_lab5\Programming_lab5\bin\Debug\Programming_lab5.exe
+D:\Work\Programming_lab5\Programming_lab5\bin\Debug\Programming_lab5.pdb
+D:\Work\Programming_lab5\Programming_lab5\obj\Debug\Programming_lab5.csprojResolveAssemblyReference.cache
+D:\Work\Programming_lab5\Programming_lab5\obj\Debug\Programming_lab5.csproj.CoreCompileInputs.cache
+D:\Work\Programming_lab5\Programming_lab5\obj\Debug\Programming_lab5.exe
+D:\Work\Programming_lab5\Programming_lab5\obj\Debug\Programming_lab5.pdb
+C:\Users\student\Desktop\еуьз\Programming_lab5\Programming_lab5\bin\Debug\Programming_lab5.exe.config
+C:\Users\student\Desktop\еуьз\Programming_lab5\Programming_lab5\obj\Debug\Programming_lab5.exe
+C:\Users\student\Desktop\еуьз\Programming_lab5\Programming_lab5\obj\Debug\Programming_lab5.pdb
+C:\Users\student\Desktop\еуьз\Programming_lab5\Programming_lab5\bin\Debug\Programming_lab5.exe
+C:\Users\student\Desktop\еуьз\Programming_lab5\Programming_lab5\bin\Debug\Programming_lab5.pdb
+C:\Users\student\Desktop\еуьз\Programming_lab5\Programming_lab5\obj\Debug\Programming_lab5.csprojResolveAssemblyReference.cache
