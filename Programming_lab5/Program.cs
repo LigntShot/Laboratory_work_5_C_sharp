@@ -11,7 +11,9 @@ namespace Programming_lab5
         //GLOBAL VARIABLE: creating global randomizer
         static Random rng = new Random();
 
+        //////////////////////////////////////////////////
         //Input mechanism with poka-yoke (idiot-proofing)
+        //////////////////////////////////////////////////
         static int InputInt32(bool mustBePozitive = false) //Flag that defines either the number is restricted to pozitives or not
         {
             int input;
@@ -57,11 +59,12 @@ namespace Programming_lab5
                 }
             }
         }
-
+        //////////////////////////////////////////////////////////
         //Function that asks the user the preferred input method
         //Outputs:
         //--TRUE if user has chosen to use randomizer
         //--FALSE if user has chosen to fill the array personally
+        //////////////////////////////////////////////////////////
         static bool AskInputMethod()
         {
             //Loop until the correct option is entered
@@ -94,9 +97,10 @@ namespace Programming_lab5
                 } 
             } while (true);
         }
-        
+        ////////////////////////////////////////////
         //Function that prints the recieved array.
-       static void PrintArray(int[] array)
+        ////////////////////////////////////////////
+        static void PrintArray(int[] array)
         {
             Console.WriteLine("Array's contents:");
             Console.Write("[");
@@ -139,9 +143,9 @@ namespace Programming_lab5
             Console.WriteLine();
         }
 
-        ///////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         //Function that prints the recieved matrix. Overloaded for ragged array
-        ///////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         static void PrintMatrix(int[][] ragArr)
         {
             Console.WriteLine("Contents of the ragged array:");
@@ -163,8 +167,9 @@ namespace Programming_lab5
             }
             Console.WriteLine();
         }
-
+        ////////////////////////////////////////////////////////////////////
         //A function that returns the random int in the range of (min, max)
+        ////////////////////////////////////////////////////////////////////
         static int GetRandomInRange (ref int min, ref int max) //Using references to change the values
         {
             //A loop that handles the possible exception
@@ -190,7 +195,134 @@ namespace Programming_lab5
             } while (true);
         }
 
+        ///////////////////////////////////////////////////////////////
+        //This function adds additional columns after each even column
+        ///////////////////////////////////////////////////////////////
+        static int[,] AddEvenColumns(int[,] matrix, bool randomized)
+        {
+            int newColumns = 0; //New number of columns
+            int n = matrix.GetLength(0) //Number of Rows
+                , m = matrix.GetLength(1); //Number of Columns
+
+            //Approximating the number of columns
+            //If the previous number was even, then...
+            if (m % 2 == 0) newColumns = m + (m / 2);
+            //If the previous number was odd, then...
+            else newColumns = m + ((m + 1) / 2) - 1;
+
+            int[,] newMatrix = new int[n, newColumns]; //Creating the new matrix with additional columns
+
+            //Enter the left border
+            Console.WriteLine("Enter the minimal number of the range:");
+            int min = InputInt32(false);
+
+            //Enter the right border
+            Console.WriteLine("Enter the maximal number of the range:");
+            int max = InputInt32(false);
+
+            for (int i = 0; i < n; i++)
+            {
+                int k = 0; //Separate counter for the new matrix
+                for (int j = 0; j < m; j++)
+                {
+                    newMatrix[i, k] = matrix[i, j]; //Copying untouched elements
+                    //If an even column was found...
+                    if (j % 2 == 0)
+                    {
+                        //Then ask the user for the input method
+                        if (randomized)
+                        {
+                            newMatrix[i, k] = GetRandomInRange(ref min ,ref max);
+                            k++; 
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter the element #{0} of ROW #{1}:", k + 2, i + 1);
+                            matrix[i, k] = InputInt32(false);
+                        }
+                    }
+                    k++;
+                }
+            }
+
+            Console.WriteLine("Column addition concluded successfully.\n");
+            Console.ReadKey();
+
+            return newMatrix;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////
+        //Function that deletes N elements from the array beginning with the number k
+        ////////////////////////////////////////////////////////////////////////////////
+        static int[] DeleteElements(int[] arr)
+        {
+            if (arr.Length == 0) //If the array is empty
+            {
+                Console.WriteLine(@"Don't even try to delete any elements from an empty array.
+                It'll probably cause space-time distortions and destroy the entire universe.");
+                return null;
+            }
+            else
+            {
+                int k = 0; //Variable for k
+                int N = 0; //Variable for N
+                //Loop that checks for N being less or equal than array length
+                do
+                {
+                    Console.WriteLine("Enter the number of elements you wish to delete (from 1 to n): ");
+                    N = InputInt32(true);
+                    //If N is less or equal than the length then quit the cycle
+                    if (N <= arr.Length)
+                    {
+                        break;
+                    }
+                    else //Otherwise, display an error message and try again
+                    {
+                        Console.WriteLine("Invalid number of element entered (Outside of array).\nPlease, try again.\n");
+                    }
+                } while (true);
+
+                //Almost the same with k
+                do
+                {
+                    Console.WriteLine("Enter the number of element you want to delete these elements from: ");
+                    k = InputInt32(true);
+                    if (k > 0 && k + N - 1 <= arr.Length) //If k + N is less or equal than the length then quit the cycle, with correction of one
+                    {
+                        k--;
+                        break;
+                    }
+                    else //Otherwise, display an error message and try again
+                    {
+                        Console.WriteLine("Invalid number of element entered (Outside of array).\nPlease, try again.\n");
+                    }
+                } while (true);
+
+                int newArrayLength = arr.Length - N; //Reducing actual array size
+                int[] supp_array = new int[newArrayLength]; //Declare a supplimentory dynamic array
+
+
+                for (int i = 0; i < newArrayLength; i++) //Cloning array into supp_array
+                {
+                    if (i < k)
+                    {
+                        supp_array[i] = arr[i];
+                    }
+                    else
+                    {
+                        supp_array[i] = arr[i + N];
+                    }
+                }
+
+                Console.WriteLine("Element deletion concluded successfully.\n");
+                Console.ReadKey();
+                return supp_array; //Return the result array
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////
         //A function that returns the ragged array with variable row length
+        ///////////////////////////////////////////////////////////////////
         static int[][] MakeRaggedArray(bool randomized)
         {
             Console.Clear();
@@ -248,8 +380,9 @@ namespace Programming_lab5
             }
         }
 
-
+        /////////////////////////////////////////////////////////////////////////////////
         //Fuction that makes, initializes and returns a 2D matrix of desired dimensions
+        /////////////////////////////////////////////////////////////////////////////////
         static int[,] MakeMatrix(bool randomized)
         {
             Console.Clear();
@@ -305,8 +438,9 @@ namespace Programming_lab5
                 return matrix;
             }
         }
-
+        ///////////////////////////////////////////////////////////////////////////
         //Fuction that makes, initializes and returns a 1D array of desired length
+        ///////////////////////////////////////////////////////////////////////////
         static int[] MakeArray(bool randomized) //Flag for array filling method
         {
             Console.Clear();
@@ -353,9 +487,11 @@ namespace Programming_lab5
             }
         }
 
+        ////////////////////////////////////////////////
         //This is a function for array interaction menu
         //It accepts a reference to the existing array.
         //It is to be initialized in the function itself.
+        /////////////////////////////////////////////////
         static void ArrayInteractionMenu(ref int[] array)
         {
             //Exit code for this menu.
@@ -411,6 +547,7 @@ namespace Programming_lab5
                             }
                         case 2:
                             {
+                                array = DeleteElements(array);
                                 break;
                             }
                         case 3:
@@ -458,9 +595,11 @@ namespace Programming_lab5
             } while (option != exitCode);
         }
 
+        //////////////////////////////////////////////////
         //This is a function for matrix interaction menu
         //It accepts a reference to the existing matrix.
         //It is to be initialized in the function itself.
+        //////////////////////////////////////////////////
         static void MatrixInteractionMenu(ref int[,] matrix)
         {
             //Exit code for this menu.
@@ -516,6 +655,7 @@ namespace Programming_lab5
                             }
                         case 2:
                             {
+                                matrix = AddEvenColumns(matrix, AskInputMethod());
                                 break;
                             }
                         case 3:
@@ -564,9 +704,11 @@ namespace Programming_lab5
             } while (option != exitCode);
         }
 
+        /////////////////////////////////////////////////////////
         //This is a function for ragged array interaction menu
         //It accepts a reference to the existing ragged array.
         //It is to be initialized in the function itself.
+        ////////////////////////////////////////////////////////
         static void RaggedArrayInteractionMenu(ref int[][] ragArr)
         {
             //Exit code for this menu.
@@ -669,7 +811,9 @@ namespace Programming_lab5
             } while (option != exitCode);
         }
 
+        //////////////////////////
         //Function for main menu
+        /////////////////////////
         static void MainMenu()
         {
             //Exit code for this menu. !!!!!!CHANGE THIS FIRST IN CASE OF RESTRUCTURING THE MENU!!!!!
