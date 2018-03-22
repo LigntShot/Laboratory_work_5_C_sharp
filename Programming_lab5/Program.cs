@@ -258,8 +258,10 @@ namespace Programming_lab5
         {
             if (arr.Length == 0) //If the array is empty
             {
-                Console.WriteLine(@"Don't even try to delete any elements from an empty array.
-                It'll probably cause space-time distortions and destroy the entire universe.");
+                Console.WriteLine(@"
+Don't even try to delete any elements from an empty array.
+It'll probably cause space-time distortions and destroy the entire universe. So, we'll just nullify your empty array.");
+                Console.ReadKey();
                 return null;
             }
             else
@@ -320,6 +322,11 @@ namespace Programming_lab5
             }
         }
 
+        //static int[][] AddRows(int[][] ragArr)
+        //{
+        //    Console.WriteLine("Enter ")
+        //}
+
         ////////////////////////////////////////////////////////////////////
         //A function that returns the ragged array with variable row length
         ///////////////////////////////////////////////////////////////////
@@ -329,6 +336,16 @@ namespace Programming_lab5
             //Entering the nubmer of rows
             Console.WriteLine("Enter pozitive number of rows:");
             int n = InputInt32(true);
+            
+            //A little easter egg
+            if(n <= 0)
+            {
+                Console.WriteLine(@"
+--Ты достал наш пустой рваный массив?
+--Лучше! У меня вобще нет массива!");
+                Console.ReadKey();
+                return null;
+            }
 
             //Creating the ragged matrix
             int[][] ragArr = new int[n][];
@@ -391,6 +408,15 @@ namespace Programming_lab5
             int m = InputInt32(true);
             Console.WriteLine("Enter pozitive number of rows:");
             int n = InputInt32(true);
+
+            if (m == 0 || n == 0)
+            {
+                Console.WriteLine(@"
+Creation of null-matrixes is prohibited.
+You can't do anything with them anyway.");
+                Console.ReadKey();
+                return null;
+            }
 
             //Creating the matrix
             int[,] matrix = new int[n, m];
