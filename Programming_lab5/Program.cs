@@ -322,10 +322,91 @@ It'll probably cause space-time distortions and destroy the entire universe. So,
             }
         }
 
-        //static int[][] AddRows(int[][] ragArr)
-        //{
-        //    Console.WriteLine("Enter ")
-        //}
+        static int[][] AddRows(int[][] ragArr, bool randomized)
+        {
+            Console.WriteLine("Enter the number of rows to add (k): ");
+            int k = InputInt32(true);
+
+            int N;
+            do
+            {
+                Console.WriteLine("Enter the number of element you want to begin with: ");
+                N = InputInt32(true);
+                if (N <= ragArr.Length + 1 && N > 0) //Коррекция на единицу
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("N cannot be bigger than the number of rows of the array.");
+                }
+            } while (true);
+            N--; //Коррекция на единицу
+
+            int[][] newRagArr = new int[ragArr.Length + k][];
+            int n = 0, temp = 0;
+
+            for (int i = 0; i <= N; i++)
+            {
+                newRagArr[i] = new int[ragArr[i].Length];
+                for (int j = 0; j < ragArr[i].Length; j++)
+                {
+                    newRagArr[i][j] = ragArr[i][j];
+                }
+                n = i;
+                temp = i;
+            }
+            n++;
+
+            int min = 0, max = 0;
+            if (randomized)
+            {
+                Console.WriteLine("Enter the minimal number of the range:");
+                min = InputInt32(false);
+
+                //Enter the right border
+                Console.WriteLine("Enter the maximal number of the range:");
+                max = InputInt32(false); 
+            }
+
+            Console.WriteLine("\nNow adding rows...");
+            for (int i = 0; i < k; i++, n++)
+            {
+                Console.WriteLine("Please enter the length of row {0}", n + 1);
+                newRagArr[n] = new int[InputInt32(true)];
+                if (randomized)
+                {
+                    
+                    //TODO: fix randomier and indexes
+                    for (int j = 0; j < newRagArr[n].Length; j++)
+                    {
+                        newRagArr[n][j] = GetRandomInRange(ref min, ref max);
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < newRagArr[n].Length; j++)
+                    {
+                        Console.WriteLine("Please enter the element #{0} of ROW #{1}:", j + 1, n + 1);
+                        newRagArr[n][j] = InputInt32(false);
+                    }
+                }
+            }
+
+            for (int i = n; i < newRagArr.Length; i++)
+            {
+                newRagArr[i] = new int[ragArr[i - k].Length];
+                for (int j = 0; j < ragArr[i - k].Length; j++)
+                {
+                    newRagArr[i][j] = ragArr[i - k][j];
+                }
+                n = i;
+            }
+
+            Console.WriteLine("Row addition has been concluded.");
+            Console.ReadKey();
+            return newRagArr;
+        }
 
         ////////////////////////////////////////////////////////////////////
         //A function that returns the ragged array with variable row length
@@ -789,6 +870,7 @@ You can't do anything with them anyway.");
                             }
                         case 2:
                             {
+                                ragArr = AddRows(ragArr, AskInputMethod());
                                 break;
                             }
                         case 3:
