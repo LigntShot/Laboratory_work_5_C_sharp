@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Programming_lab5
 {
@@ -74,7 +70,8 @@ namespace Programming_lab5
                 Console.Clear(); //Clear the console
                 Console.WriteLine("How do you want to fill the array?\n");
                 Console.WriteLine("1. Use randomizer");
-                Console.WriteLine("2. I'll fill the array myself!\n");
+                Console.WriteLine("2. I'll fill the array myself!");
+                Console.WriteLine("3. Abort\n");
                 Console.WriteLine("Your choice: ");
 
                 option = InputInt32(true);
@@ -87,6 +84,10 @@ namespace Programming_lab5
                     case 2:
                         {
                             return false;
+                        }
+                    case 3:
+                        {
+                            throw new Exception("Array creation has been aborted by the user.");
                         }
                     default:
                         {
@@ -210,15 +211,30 @@ namespace Programming_lab5
             //If the previous number was odd, then...
             else newColumns = m + ((m + 1) / 2) - 1;
 
+            if (newColumns == m)
+            {
+                Console.WriteLine(@"
+No new columns were added.
+
+Press any key to continue...");
+                Console.ReadKey();
+                return matrix;
+            }
+
             int[,] newMatrix = new int[n, newColumns]; //Creating the new matrix with additional columns
 
-            //Enter the left border
-            Console.WriteLine("Enter the minimal number of the range:");
-            int min = InputInt32(false);
+            int min = 0, max = 0;
 
-            //Enter the right border
-            Console.WriteLine("Enter the maximal number of the range:");
-            int max = InputInt32(false);
+            if (randomized)
+            {
+                //Enter the left border
+                Console.WriteLine("Enter the minimal number of the range:");
+                min = InputInt32(false);
+
+                //Enter the right border
+                Console.WriteLine("Enter the maximal number of the range:");
+                max = InputInt32(false); 
+            }
 
             for (int i = 0; i < n; i++)
             {
@@ -227,18 +243,19 @@ namespace Programming_lab5
                 {
                     newMatrix[i, k] = matrix[i, j]; //Copying untouched elements
                     //If an even column was found...
-                    if (j % 2 == 0)
+                    if ((j + 1) % 2 == 0)
                     {
                         //Then ask the user for the input method
                         if (randomized)
                         {
-                            newMatrix[i, k] = GetRandomInRange(ref min ,ref max);
+                            newMatrix[i, k + 1] = GetRandomInRange(ref min ,ref max);
                             k++; 
                         }
                         else
                         {
                             Console.WriteLine("Please enter the element #{0} of ROW #{1}:", k + 2, i + 1);
-                            matrix[i, k] = InputInt32(false);
+                            newMatrix[i, k + 1] = InputInt32(false);
+                            k++;
                         }
                     }
                     k++;
@@ -256,16 +273,15 @@ namespace Programming_lab5
         ////////////////////////////////////////////////////////////////////////////////
         static int[] DeleteElements(int[] arr)
         {
-            if (arr.Length == 0) //If the array is empty
-            {
-                Console.WriteLine(@"
-Don't even try to delete any elements from an empty array.
-It'll probably cause space-time distortions and destroy the entire universe. So, we'll just nullify your empty array.");
-                Console.ReadKey();
-                return null;
-            }
-            else
-            {
+//            if (arr.Length == 0) //If the array is empty
+//            {
+//                Console.WriteLine(@"
+//ERROR: Cannot delete elements out of an empty array.");
+//                Console.ReadKey();
+//                return null;
+//            }
+//            else
+//            {
                 int k = 0; //Variable for k
                 int N = 0; //Variable for N
                 //Loop that checks for N being less or equal than array length
@@ -319,7 +335,7 @@ It'll probably cause space-time distortions and destroy the entire universe. So,
                 Console.WriteLine("Element deletion concluded successfully.\n");
                 Console.ReadKey();
                 return supp_array; //Return the result array
-            }
+            //}
         }
 
         static int[][] AddRows(int[][] ragArr, bool randomized)
@@ -376,8 +392,6 @@ It'll probably cause space-time distortions and destroy the entire universe. So,
                 newRagArr[n] = new int[InputInt32(true)];
                 if (randomized)
                 {
-                    
-                    //TODO: fix randomier and indexes
                     for (int j = 0; j < newRagArr[n].Length; j++)
                     {
                         newRagArr[n][j] = GetRandomInRange(ref min, ref max);
@@ -422,8 +436,9 @@ It'll probably cause space-time distortions and destroy the entire universe. So,
             if(n <= 0)
             {
                 Console.WriteLine(@"
---Ты достал наш пустой рваный массив?
---Лучше! У меня вобще нет массива!");
+Creation of empty ragged arrays is prohibited.
+
+Press any key to continue...");
                 Console.ReadKey();
                 return null;
             }
@@ -494,7 +509,8 @@ It'll probably cause space-time distortions and destroy the entire universe. So,
             {
                 Console.WriteLine(@"
 Creation of null-matrixes is prohibited.
-You can't do anything with them anyway.");
+
+Press any key to continue...");
                 Console.ReadKey();
                 return null;
             }
@@ -553,7 +569,18 @@ You can't do anything with them anyway.");
             Console.Clear();
             Console.WriteLine("Enter pozitive array size:");
             //Initialized the array with input
-            int[] array = new int[InputInt32(true)];
+            int N = InputInt32(true);
+            int[] array = new int[N];
+
+            if (N <= 0)
+            {
+                Console.WriteLine(@"
+Creation of null-arrays is prohibited.
+
+Press any key to continue...");
+                Console.ReadKey();
+                return null;
+            }
 
             if (randomized)
             {
@@ -649,8 +676,18 @@ You can't do anything with them anyway.");
                     {
                         case 1:
                             {
-                                array = MakeArray(AskInputMethod());
-                                break;
+                                try
+                                {
+                                    array = MakeArray(AskInputMethod());
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey();
+                                    break;
+                                }
                             }
                         case 2:
                             {
@@ -684,8 +721,18 @@ You can't do anything with them anyway.");
                     {
                         case 1:
                             {
-                                array = MakeArray(AskInputMethod());
-                                break;
+                                try
+                                {
+                                    array = MakeArray(AskInputMethod());
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey();
+                                    break;
+                                }
                             }
                         case 2:
                             {
@@ -757,13 +804,33 @@ You can't do anything with them anyway.");
                     {
                         case 1:
                             {
-                                matrix = MakeMatrix(AskInputMethod());
-                                break;
+                                try
+                                {
+                                    matrix = MakeMatrix(AskInputMethod());
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey();
+                                    break;
+                                }
                             }
                         case 2:
                             {
-                                matrix = AddEvenColumns(matrix, AskInputMethod());
-                                break;
+                                try
+                                {
+                                    matrix = AddEvenColumns(matrix, AskInputMethod());
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey();
+                                    break;
+                                }
                             }
                         case 3:
                             {
@@ -793,8 +860,18 @@ You can't do anything with them anyway.");
                     {
                         case 1:
                             {
-                                matrix = MakeMatrix(AskInputMethod());
-                                break;
+                                try
+                                {
+                                    matrix = MakeMatrix(AskInputMethod());
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey();
+                                    break;
+                                }
                             }
                         case 2:
                             {
@@ -852,7 +929,7 @@ You can't do anything with them anyway.");
                 if (allowInteractions)
                 {
                     Console.WriteLine("\n1. Reform the ragged array");
-                    Console.WriteLine("2. Add columns after every even column");
+                    Console.WriteLine("2. Add K rows, beginning from the number N");
                     Console.WriteLine("3. Back to main menu\n");
                     Console.WriteLine("Your choice: ");
                     exitCode = 3; //Changed exit code due to menu shapeshifting
@@ -865,13 +942,33 @@ You can't do anything with them anyway.");
                     {
                         case 1:
                             {
-                                ragArr = MakeRaggedArray(AskInputMethod());
-                                break;
+                                try
+                                {
+                                    ragArr = MakeRaggedArray(AskInputMethod());
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey();
+                                    break;
+                                }
                             }
                         case 2:
                             {
-                                ragArr = AddRows(ragArr, AskInputMethod());
-                                break;
+                                try
+                                {
+                                    ragArr = AddRows(ragArr, AskInputMethod());
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey();
+                                    break;
+                                }
                             }
                         case 3:
                             {
@@ -901,8 +998,18 @@ You can't do anything with them anyway.");
                     {
                         case 1:
                             {
-                                ragArr = MakeRaggedArray(AskInputMethod());
-                                break;
+                                try
+                                {
+                                    ragArr = MakeRaggedArray(AskInputMethod());
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(e.Message);
+                                    Console.ReadKey();
+                                    break;
+                                }
                             }
                         case 2:
                             {
